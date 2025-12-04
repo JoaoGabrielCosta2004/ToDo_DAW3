@@ -16,6 +16,7 @@ public class TarefaMapper {
     public TarefaResponseDTO from(Tarefa entity){
         return TarefaResponseDTO.builder()
             .lookupId(entity.getLookupId())
+                .id(entity.getId())
             .descricao(entity.getDescricao())
             .build();
     }

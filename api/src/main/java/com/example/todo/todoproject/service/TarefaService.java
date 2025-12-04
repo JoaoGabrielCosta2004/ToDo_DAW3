@@ -38,7 +38,7 @@ public class TarefaService {
                 .orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada"));
     }
     public TarefaResponseDTO atualizar(Long id, TarefaRequestDTO dto){
-        Tarefa tarefa = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Turma não encontrada"));
+        Tarefa tarefa = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada"));
         tarefa.setDescricao(dto.descricao());
         return mapper.from(repository.save(tarefa));
     }
