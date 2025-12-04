@@ -37,6 +37,12 @@ public class TarefaService {
                 .map(mapper::from)
                 .orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada"));
     }
+    public TarefaResponseDTO atualizarFeito(Long id){
+        Tarefa tarefa = repository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada"));
+        tarefa.setFeito(!tarefa.getFeito());
+        return mapper.from(repository.save(tarefa));
+    }
     public TarefaResponseDTO atualizar(Long id, TarefaRequestDTO dto){
         Tarefa tarefa = repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Tarefa não encontrada"));
         tarefa.setDescricao(dto.descricao());

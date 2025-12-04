@@ -10,6 +10,7 @@ public class TarefaMapper {
     public Tarefa from(TarefaRequestDTO dto) {
         Tarefa tarefa = Tarefa.builder()
             .descricao(dto.descricao())
+            .feito(false) //isso provavelmente vai dar erro
             .build();
         return tarefa;
     }
@@ -18,6 +19,7 @@ public class TarefaMapper {
             .lookupId(entity.getLookupId())
                 .id(entity.getId())
             .descricao(entity.getDescricao())
+            .feito(entity.getFeito())
             .build();
     }
 }

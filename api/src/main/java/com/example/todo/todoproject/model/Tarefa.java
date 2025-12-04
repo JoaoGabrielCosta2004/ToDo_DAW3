@@ -21,6 +21,9 @@ public class Tarefa {
     private UUID lookupId;
 
     @Column(nullable = false)
+    private Boolean feito;
+
+    @Column(nullable = false)
     private String descricao;
 
     @PrePersist
