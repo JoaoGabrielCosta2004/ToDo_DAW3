@@ -2,9 +2,11 @@ package com.example.todo.todoproject.rest.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,13 +38,18 @@ public class TarefaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void salvar(){
-
+    public TarefaResponseDTO salvar(@RequestBody @Valid TarefaRequestDTO dto){
+        return service.salvar(dto);
     }
 
     @PutMapping("/{id}")
     public TarefaResponseDTO atualizar(@PathVariable Long id, @RequestBody TarefaRequestDTO dto){
         return service.atualizar(id, dto);
+    }
+
+    @PatchMapping("/{id}")
+    public TarefaResponseDTO atualizarFeito(@PathVariable Long id){
+        return service.atualizarFeito(id);
     }
 
     @DeleteMapping("/{id}")

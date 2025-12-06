@@ -7,5 +7,6 @@ import lombok.Builder;
 public record TarefaResponseDTO(
     UUID lookupId,
     Long id,
-    String descricao
+    String descricao,
+    Boolean feito
 ){}

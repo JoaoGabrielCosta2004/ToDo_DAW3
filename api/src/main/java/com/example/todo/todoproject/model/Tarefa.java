@@ -17,8 +17,11 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private UUID lookupId;
+
+    @Column(nullable = false)
+    private Boolean feito;
 
     @Column(nullable = false)
     private String descricao;
