@@ -1,0 +1,81 @@
+.editar-tarefa-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.main-content {
+  padding: 2rem 0;
+  min-height: calc(100vh - 80px);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #2d3748;
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container p,
+.error-container p {
+  font-size: 1.2rem;
+  color: #2d3748;
+}
+
+.mensagem {
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mensagem.sucesso {
+  background-color: #c6f6d5;
+  color: #22543d;
+  border: 1px solid #9ae6b4;
+}
+
+.mensagem.erro {
+  background-color: #fed7d7;
+  color: #742a2a;
+  border: 1px solid #fc8181;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem 0;
+  }
+
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
+}
+

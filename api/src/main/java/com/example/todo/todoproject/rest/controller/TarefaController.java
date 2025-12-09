@@ -43,7 +43,7 @@ public class TarefaController {
     }
 
     @PutMapping("/{id}")
-    public TarefaResponseDTO atualizar(@PathVariable Long id, @RequestBody TarefaRequestDTO dto){
+    public TarefaResponseDTO atualizar(@PathVariable Long id, @RequestBody @Valid TarefaRequestDTO dto){
         return service.atualizar(id, dto);
     }
 

@@ -1,0 +1,11 @@
+.task-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.empty-message {
+  text-align: center;
+  color: #888;
+  padding: 20px 0;
+  font-style: italic;
+}
