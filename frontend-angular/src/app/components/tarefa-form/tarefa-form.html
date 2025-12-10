@@ -1,0 +1,25 @@
+<div class="form-container">
+  <form (ngSubmit)="onSubmit($event)">
+    <div class="form-group">
+      <input
+        type="text"
+        [(ngModel)]="descricao"
+        name="descricao"
+        placeholder="Adicionar uma nova tarefa"
+        class="input-field"
+        required
+      />
+      <button type="submit" class="btn btn-primary">
+        {{ isEditando ? 'Atualizar' : 'Adicionar' }}
+      </button>
+      <button
+        *ngIf="isEditando"
+        type="button"
+        (click)="onCancelar()"
+        class="btn btn-secondary"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

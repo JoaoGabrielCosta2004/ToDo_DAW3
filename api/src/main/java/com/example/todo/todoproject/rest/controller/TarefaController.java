@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.todo.todoproject.rest.dto.TarefaRequestDTO;
 import com.example.todo.todoproject.rest.dto.TarefaResponseDTO;
@@ -21,6 +22,7 @@ import com.example.todo.todoproject.service.TarefaService;
 
 @RestController
 @RequestMapping("/tarefas")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TarefaController {
     private final TarefaService service;
     public TarefaController(TarefaService service){
