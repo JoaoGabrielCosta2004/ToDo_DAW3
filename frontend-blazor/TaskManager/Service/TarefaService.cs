@@ -23,7 +23,7 @@ namespace TaskManager.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erro GET: {ex.Message}");
+                Console.WriteLine($" Erro GET: {ex.Message}");
                 return new List<Tarefa>();
             }
         }
@@ -33,29 +33,29 @@ namespace TaskManager.Services
         {
             try
             {
-                Console.WriteLine($"📤 Tentando adicionar: {descricao}");
+                Console.WriteLine($" Tentando adicionar: {descricao}");
                 
                 var dto = new { descricao = descricao };
                 var response = await _httpClient.PostAsJsonAsync(_apiBaseUrl, dto);
                 
-                Console.WriteLine($"📥 Status POST: {response.StatusCode}");
+                Console.WriteLine($" Status POST: {response.StatusCode}");
                 
                 if (response.IsSuccessStatusCode)
                 {
                     var tarefa = await response.Content.ReadFromJsonAsync<Tarefa>();
-                    Console.WriteLine($"✅ Tarefa adicionada: {tarefa?.Id}");
+                    Console.WriteLine($" Tarefa adicionada: {tarefa?.Id}");
                     return tarefa;
                 }
                 else
                 {
                     var erro = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"❌ Erro POST: {erro}");
+                    Console.WriteLine($" Erro POST: {erro}");
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Exception POST: {ex.Message}");
+                Console.WriteLine($" Exception POST: {ex.Message}");
                 return null;
             }
         }
@@ -65,28 +65,28 @@ namespace TaskManager.Services
         {
             try
             {
-                Console.WriteLine($"✏️ Tentando atualizar tarefa {id}: {novaDescricao}");
+                Console.WriteLine($" Tentando atualizar tarefa {id}: {novaDescricao}");
                 
                 var dto = new { descricao = novaDescricao };
                 var response = await _httpClient.PutAsJsonAsync($"{_apiBaseUrl}/{id}", dto);
                 
-                Console.WriteLine($"📥 Status PUT: {response.StatusCode}");
+                Console.WriteLine($" Status PUT: {response.StatusCode}");
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"✅ Tarefa {id} atualizada");
+                    Console.WriteLine($" Tarefa {id} atualizada");
                     return true;
                 }
                 else
                 {
                     var erro = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"❌ Erro PUT: {erro}");
+                    Console.WriteLine($" Erro PUT: {erro}");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Exception PUT: {ex.Message}");
+                Console.WriteLine($" Exception PUT: {ex.Message}");
                 return false;
             }
         }
@@ -96,28 +96,28 @@ namespace TaskManager.Services
         {
             try
             {
-                Console.WriteLine($"🔄 Tentando marcar tarefa {id}");
+                Console.WriteLine($" Tentando marcar tarefa {id}");
                 
                 var url = $"{_apiBaseUrl}/{id}";
                 var response = await _httpClient.PatchAsync(url, null);
                 
-                Console.WriteLine($"📥 Status PATCH: {response.StatusCode}");
+                Console.WriteLine($" Status PATCH: {response.StatusCode}");
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"✅ Tarefa {id} marcada");
+                    Console.WriteLine($" Tarefa {id} marcada");
                     return true;
                 }
                 else
                 {
                     var erro = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"❌ Erro PATCH: {erro}");
+                    Console.WriteLine($" Erro PATCH: {erro}");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Exception PATCH: {ex.Message}");
+                Console.WriteLine($" Exception PATCH: {ex.Message}");
                 return false;
             }
         }
@@ -127,28 +127,28 @@ namespace TaskManager.Services
         {
             try
             {
-                Console.WriteLine($"🗑️ Tentando excluir tarefa {id}");
+                Console.WriteLine($" Tentando excluir tarefa {id}");
                 
                 var url = $"{_apiBaseUrl}/{id}";
                 var response = await _httpClient.DeleteAsync(url);
                 
-                Console.WriteLine($"📥 Status DELETE: {response.StatusCode}");
+                Console.WriteLine($" Status DELETE: {response.StatusCode}");
                 
                 if (response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"✅ Tarefa {id} excluída");
+                    Console.WriteLine($" Tarefa {id} excluída");
                     return true;
                 }
                 else
                 {
                     var erro = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"❌ Erro DELETE: {erro}");
+                    Console.WriteLine($" Erro DELETE: {erro}");
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Exception DELETE: {ex.Message}");
+                Console.WriteLine($" Exception DELETE: {ex.Message}");
                 return false;
             }
         }
