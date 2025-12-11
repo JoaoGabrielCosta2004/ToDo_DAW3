@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Tarefa } from "../interfaces/Tarefa";
 
-const API_URL = "https://SEU-BACKEND.COM/tarefas"; // coloque o seu backend
+const API_URL = "http://localhost:8080/tarefas";
 
 export default {
   listar(): Promise<{ data: Tarefa[] }> {
