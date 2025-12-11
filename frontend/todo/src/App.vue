@@ -23,7 +23,7 @@
     </div>
 
     <!-- Modal -->
-    <div v-if="editando" class="modal">
+    <div v-if="editando" class="modal" @click.self="cancelarEdicao">
       <div class="modal-content">
         <h3>Editar Tarefa</h3>
         <input v-model="editDescricao" />
@@ -53,14 +53,19 @@ export default defineComponent({
     };
   },
 
-  mounted() {
-    this.carregar();
+  async mounted() {
+    await this.carregar();
   },
 
   methods: {
     async carregar() {
-      const response = await tarefaService.listar();
-      this.tarefas = response.data;
+      try {
+        const response = await tarefaService.listar();
+        console.log("Tarefas carregadas:", response.data);
+        this.tarefas = response.data;
+      } catch (error) {
+        console.error("Erro ao carregar tarefas:", error);
+      }
     },
 
     async adicionar() {
@@ -72,7 +77,7 @@ export default defineComponent({
       });
 
       this.novaTarefa = "";
-      this.carregar();
+      await this.carregar();
     },
 
     editarTarefa(tarefa: Tarefa) {
@@ -89,27 +94,33 @@ export default defineComponent({
       });
 
       this.editando = false;
-      this.carregar();
+      this.tarefaEditando = null;
+      await this.carregar();
     },
 
     cancelarEdicao() {
       this.editando = false;
+      this.tarefaEditando = null;
     },
 
     async excluirTarefa(id: number) {
       await tarefaService.excluir(id);
-      this.carregar();
+      await this.carregar();
     },
 
     async marcarFeito(id: number) {
       await tarefaService.marcarFeito(id);
-      this.carregar();
+      await this.carregar();
     }
   }
 });
 </script>
 
 <style>
+body {
+  background: #f3f3f3;
+}
+
 .container {
   width: 450px;
   margin: auto;
@@ -117,10 +128,23 @@ export default defineComponent({
   font-family: sans-serif;
 }
 
+h1 {
+  text-align: center;
+}
+
 .add-box {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+.add-box input {
+  flex: 1;
+  padding: 8px;
+}
+
+.add-box button {
+  padding: 8px 14px;
 }
 
 .lista {
