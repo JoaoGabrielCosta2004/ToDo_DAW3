@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,8 @@ import com.example.todo.todoproject.service.TarefaService;
 
 @RestController
 @RequestMapping("/tarefas")
+@CrossOrigin("*")
+
 public class TarefaController {
     private final TarefaService service;
     public TarefaController(TarefaService service){

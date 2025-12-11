@@ -1,0 +1,207 @@
+@page "/"
+@rendermode InteractiveServer
+@using TaskManager.Models
+@using TaskManager.Services
+@inject TarefaService TarefaService
+
+<PageTitle>Gerenciador de Tarefas</PageTitle>
+
+<div class="container-custom">
+    <div class="card-custom">
+        <div class="header-custom">
+            <h3>GERENCIADOR DE TAREFAS</h3>
+        </div>
+        
+        <div class="body-custom">
+            <div class="input-section">
+                <input type="text" 
+                       class="input-custom" 
+                       placeholder="Adicionar uma nova tarefa" 
+                       @bind="novaDescricao"
+                       @bind:event="oninput"
+                       @onkeydown="HandleKeyPress" />
+                <button class="btn-add" @onclick="AdicionarTarefa">
+                    Adicionar
+                </button>
+            </div>
+
+            @if (tarefas == null)
+            {
+                <div class="loading-section">
+                    <div class="spinner"></div>
+                    <p>Carregando...</p>
+                </div>
+            }
+            else if (tarefas.Count == 0)
+            {
+                <div class="empty-section">
+                    <div class="empty-icon">📋</div>
+                    <p>Nenhuma tarefa cadastrada</p>
+                    <small>Adicione sua primeira tarefa acima!</small>
+                </div>
+            }
+            else
+            {
+                <div class="task-list">
+                    @foreach (var tarefa in TarefasOrdenadas)
+                    {
+                        <div class="task-item">
+                            <div class="task-content">
+                                <input type="checkbox" 
+                                       class="checkbox-custom" 
+                                       checked="@tarefa.Feito"
+                                       @onchange="@(() => AlternarConclusao(tarefa))"
+                                       id="tarefa-@tarefa.Id" />
+                                
+                                @if (tarefaEditando?.Id == tarefa.Id)
+                                {
+                                    <input type="text" 
+                                           class="input-edit" 
+                                           @bind="descricaoEditada"
+                                           @bind:event="oninput"
+                                           @onkeydown="@((e) => HandleKeyPressEdit(e, tarefa))" />
+                                }
+                                else
+                                {
+                                    <label class="task-label @(tarefa.Feito ? "completed" : "")" 
+                                           for="tarefa-@tarefa.Id">
+                                        @tarefa.Descricao
+                                    </label>
+                                }
+                            </div>
+
+                            <div class="task-actions">
+                                @if (tarefaEditando?.Id == tarefa.Id)
+                                {
+                                    <button class="btn-save" @onclick="() => SalvarEdicao(tarefa)">
+                                        Salvar
+                                    </button>
+                                    <button class="btn-cancel" @onclick="CancelarEdicao">
+                                        Cancelar
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn-edit" @onclick="() => IniciarEdicao(tarefa)">
+                                        Editar
+                                    </button>
+                                    <button class="btn-delete" @onclick="@(() => ExcluirTarefa(tarefa.Id))">
+                                        Excluir
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="stats-section">
+                    <span>Total: <strong>@tarefas.Count</strong></span>
+                    <span>Feitas: <strong>@tarefas.Count(t => t.Feito)</strong></span>
+                    <span>Pendentes: <strong>@tarefas.Count(t => !t.Feito)</strong></span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Tarefa>? tarefas;
+    private string novaDescricao = string.Empty;
+    private Tarefa? tarefaEditando;
+    private string descricaoEditada = string.Empty;
+
+    // Propriedade para ordenar: Pendentes ANTES de Feitas
+    private IEnumerable<Tarefa> TarefasOrdenadas => 
+        tarefas?.OrderBy(t => t.Feito).ThenByDescending(t => t.Id) ?? Enumerable.Empty<Tarefa>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarTarefas();
+    }
+
+    private async Task CarregarTarefas()
+    {
+        tarefas = await TarefaService.ObterTodasTarefasAsync();
+    }
+
+    private async Task AdicionarTarefa()
+    {
+        if (!string.IsNullOrWhiteSpace(novaDescricao))
+        {
+            var resultado = await TarefaService.AdicionarTarefaAsync(novaDescricao);
+            
+            if (resultado != null)
+            {
+                novaDescricao = string.Empty;
+                await CarregarTarefas();
+            }
+        }
+    }
+
+    private async Task AlternarConclusao(Tarefa tarefa)
+    {
+        var sucesso = await TarefaService.MarcarConcluidaAsync(tarefa.Id);
+        
+        if (sucesso)
+        {
+            await CarregarTarefas();
+        }
+    }
+
+    private void IniciarEdicao(Tarefa tarefa)
+    {
+        tarefaEditando = tarefa;
+        descricaoEditada = tarefa.Descricao;
+    }
+
+    private async Task SalvarEdicao(Tarefa tarefa)
+    {
+        if (!string.IsNullOrWhiteSpace(descricaoEditada))
+        {
+            tarefa.Descricao = descricaoEditada;
+            var sucesso = await TarefaService.AtualizarTarefaAsync(tarefa.Id, descricaoEditada);
+            
+            if (sucesso)
+            {
+                CancelarEdicao();
+                await CarregarTarefas();
+            }
+        }
+    }
+
+    private void CancelarEdicao()
+    {
+        tarefaEditando = null;
+        descricaoEditada = string.Empty;
+    }
+
+    private async Task ExcluirTarefa(long id)
+    {
+        var sucesso = await TarefaService.ExcluirTarefaAsync(id);
+        
+        if (sucesso)
+        {
+            await CarregarTarefas();
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await AdicionarTarefa();
+        }
+    }
+
+    private async Task HandleKeyPressEdit(KeyboardEventArgs e, Tarefa tarefa)
+    {
+        if (e.Key == "Enter")
+        {
+            await SalvarEdicao(tarefa);
+        }
+        else if (e.Key == "Escape")
+        {
+            CancelarEdicao();
+        }
+    }
+}
